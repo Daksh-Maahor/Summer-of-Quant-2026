@@ -1,0 +1,371 @@
+\documentclass[twoside]{article}
+\setlength{\oddsidemargin}{0.25 in}
+\setlength{\evensidemargin}{-0.25 in}
+\setlength{\topmargin}{-0.6 in}
+\setlength{\textwidth}{6.5 in}
+\setlength{\textheight}{8.5 in}
+\setlength{\headsep}{0.75 in}
+\setlength{\parindent}{0 in}
+\setlength{\parskip}{0.1 in}
+
+%
+% ADD PACKAGES here:
+%
+
+\usepackage{amsmath}
+\usepackage{bbm}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+
+%
+% The following commands set up the lecnum (lecture number)
+% counter and make various numbering schemes work relative
+% to the lecture number.
+%
+\newcounter{lecnum}
+\renewcommand{\thepage}{\thelecnum-\arabic{page}}
+\renewcommand{\thesection}{\thelecnum.\arabic{section}}
+\renewcommand{\theequation}{\thelecnum.\arabic{equation}}
+\renewcommand{\thefigure}{\thelecnum.\arabic{figure}}
+\renewcommand{\thetable}{\thelecnum.\arabic{table}}
+
+%
+% The following macro is used to generate the header.
+%
+\newcommand{\lecture}[4]{
+   \pagestyle{myheadings}
+   \thispagestyle{plain}
+   \newpage
+   \setcounter{lecnum}{#1}
+   \setcounter{page}{1}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{\vspace{2mm}
+    \hbox to 6.28in { {\bf SOQ 2026: Summer of Quant
+	\hfill May-Jul 2026} }
+       \vspace{4mm}
+       \hbox to 6.28in { {\Large \hfill Lecture #1: #2  \hfill} }
+      \vspace{2mm}}
+   }
+   \end{center}
+   \markboth{Lecture #1: #2}{Lecture #1: #2}
+}
+%
+% Convention for citations is authors' initials followed by the year.
+% For example, to cite a paper by Leighton and Maggs you would type
+% \cite{LM89}, and to cite a paper by Strassen you would type \cite{S69}.
+% (To avoid bibliography problems, for now we redefine the \cite command.)
+% Also commands that create a suitable format for the reference list.
+\renewcommand{\cite}[1]{[#1]}
+\def\beginrefs{\begin{list}%
+        {[\arabic{equation}]}{\usecounter{equation}
+         \setlength{\leftmargin}{2.0truecm}\setlength{\labelsep}{0.4truecm}%
+         \setlength{\labelwidth}{1.6truecm}}}
+\def\endrefs{\end{list}}
+\def\bibentry#1{\item[\hbox{[#1]}]}
+
+%Use this command for a figure; it puts a figure in wherever you want it.
+%usage: \fig{NUMBER}{JUST-THE-FILENAME}{CAPTION}
+\newcommand{\fig}[3]{
+% 			\vspace{#2}
+			\begin{center}
+			\includegraphics{figures/#2} 
+			\newline
+			Figure \thelecnum.#1:~#3
+			\end{center}
+	}
+	
+% Use these for theorems, lemmas, proofs, etc.
+\newtheorem{theorem}{Theorem}[lecnum]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newenvironment{proof}{{\bf Proof:}}{\hfill\rule{2mm}{2mm}}
+
+% **** IF YOU WANT TO DEFINE ADDITIONAL MACROS FOR YOURSELF, PUT THEM HERE:
+
+\newcommand\E{\mathbb{E}}
+
+\begin{document}
+%FILL IN THE RIGHT INFO.
+%\lecture{**LECTURE-NUMBER**}{**DATE**}{**LECTURER**}{**SCRIBE**}
+\lecture{1}{Probability, Stochastic Calculus and Basics of Finance}
+%\footnotetext{These notes are partially based on those of Nigel Mansell.}
+
+
+\section{Random Variable} % Don't be this informal in your notes!
+
+A random variable is a number attached to a random outcome.
+Each random variable is fully described by its distribution: the values it can take, and how likely it is.
+
+There are two types of random variables:
+
+\begin{enumerate}
+   \item[\bf Discrete :] countable values (usually integers). Number of heads in 10 flips, number of trades made today.
+   \item[\bf Continuous :] values over a range. Tomorrow's temperature, the price of a stock at noon. 
+\end{enumerate}
+
+\subsection{Probability Mass Function}
+
+It lists the probability corresponding to each value.
+\begin{align*}
+   p(x) &= P(X = x) \\
+   \sum_x p(x) &= 1
+\end{align*}
+
+\subsection{Probability Density Function}
+
+For a continuous variable, probability of x being a single number is 0. Instead we use probability density $f(x)$ over a domain $D$. Probability of x being between two numbers $a$ and $b$ is:
+\begin{align*}
+   P(a \leq X \leq b) &= \int_a^bf(x) dx \\
+   \int_D f(x) dx &= 1
+\end{align*}
+
+\subsection{Cumulative Density Function}
+
+For a continuous variable, the cumulative density function encodes the probability of being at most x.
+
+It is denoted by $F(x)$.
+\[
+   F(x) = P(X \leq x)
+\]
+The graph of $F(x)$ vs $x$ is a non-decreasing curve, with $F(x) = 0$ at the extreme left and $F(x) = 1$ at the extreme right.
+
+Also, in the continuous case,
+\[
+   F'(x) = f(x)
+\]
+
+\section{Expectation}
+
+The expectation of a discrete random variable is defined as:
+\[
+   E[X] = \sum_x x \cdot p(x)
+\]
+
+For a continuous variable, the expectation is defined as:
+\[
+   E[X] = \int_D x \cdot f(x) dx
+\]
+
+{\bf Example: } In the case of a fair die, each face has an equal probability of $\frac{1}{6}$.
+\[
+   E[X] = \frac{1+2+3+4+5+6}{6} = \frac{21}{6} = 3.5
+\]
+
+\subsection{Properties of Expectation}
+
+\begin{itemize}
+   \item {\bf Linearity}
+   
+   For any two random variables $X$ and $Y$ and any two constants $a$ and $b$,
+   \[
+      E[aX+bY] = a \cdot E[X] + b \cdot E[Y]
+   \]
+
+   This is true {\bf regardless of whether $X$ and $Y$ are independent or not.}
+
+   \item {\bf The Indicator Trick}
+   
+   Consider an event $A$. Define another event ${\mathbbm 1_A} = 1$, if $A$ occurs and $0$ otherwise. Then,
+   \[
+      E[{\mathbbm 1_A}] = 1 \cdot P(A) + 0 \cdot (1 - P(A)) = P(A)
+   \]
+   Thus, expectation of an indicator event is the probability of the corresponding event.
+
+   If you want the expected number of events that occur out of $A_1, \dots, A_n$, just add up their probabilities. No independence is necessary in this formula.
+
+   \[
+      E[\text{Number of $A_i$ that occur}] = P(A_1) + \dots + P(A_n)
+   \]
+
+   \item {\bf Composition}
+   
+   The expected value of a function $g(X)$ of a random variable $X$ is defined as,
+
+   For a discrete random variable:
+
+   \[
+      E[g(X)] = \sum_x g(x) \cdot p(x)
+   \]
+
+   For a continuous random variable:
+
+   \[
+      E[g(X)] = \int_D g(x) \cdot f(x) dx
+   \]
+\end{itemize}
+
+\section{Variance}
+
+The variance of a random variable is defined as:
+\[
+   Var(X) = E[(X - \mu)^2]
+\]
+where,
+\[
+   \mu = E[X]
+\]
+
+Simplifying the expression further:
+
+\begin{align*}
+   Var(X) &= E[ (X - \mu)^2 ] \\
+   &= E[X^2 - 2 \cdot \mu \cdot X + \mu^2] \\
+   &= E[X^2] - 2 \cdot \mu \cdot E[X] + \mu^2 \\
+   &= E[X^2] - 2 \cdot \mu^2 + \mu^2 \\ 
+   &= E[X^2] - \mu^2 \\ 
+   Var(X) &= E[X^2] - (E[X])^2
+\end{align*}
+
+The standard deviation $\sigma$ is defined as
+\[
+   \sigma = \sqrt{Var(X)}
+\]
+
+$X$ is typically within $\pm \sigma$ of its expected value.
+
+\subsection{Properties of Variance}
+
+\begin{itemize}
+   \item{\bf Transformation and Scaling}
+   \begin{align*}
+      Var(X + b) &= Var(X) \\
+      Var(aX) &= a^2Var(X) \\
+      Var(aX+b) &= a^2Var(X)
+   \end{align*}
+
+   \item{\bf Variance of sum of two random variables}
+   \[
+      Var(X + Y) = Var(X) + Var(Y) + 2 \cdot Cov(X, Y)
+   \]
+
+   Here, $Cov(X, Y)$ is called the covariance of $X$ and $Y$, which will be defined later in detail.
+
+   Particularly, if $X$ and $Y$ are independent, $Cov(X, Y) = 0$ and
+   \[
+      Var(X + Y) = Var(X) + Var(Y)
+   \]
+\end{itemize}
+
+\section{Independence}
+
+Two events are independent if the outcome of one doesn't depend on the outcome of other.
+
+For two independent events $A$ and $B$,
+
+\[
+   P(A \cap B) = P(A) \cdot P(B)
+\]
+
+Two random variables are independent if every event about $X$ is independent to every event about $Y$.
+
+\[
+   p(x, y) = p_X(x) \cdot p_Y(y)
+\]
+
+If two random variables $X$ and $Y$ are independent, we have the following properties:
+
+\begin{align*}
+   E[XY] &= E[X] \cdot E[Y] \\
+   Var(X+Y) &= Var(X) + Var(Y) \\
+   Cov(X, Y) &= 0
+\end{align*}
+
+\section{Conditional Probability and Bayes Theorem}
+
+The conditional probability of $A$ given $B$ has occured (given $P(B) > 0$) is:
+
+\[
+   P(A | B) = \frac{P(A \cap B)}{P(B)}
+\]
+
+Also,
+
+\[
+   P(B | A) = \frac{P(A \cap B)}{P(A)}
+\]
+
+Rearranging, we have:
+
+\[
+   P(B) \cdot P(A | B) = P(A) \cdot P(B | A)
+\]
+
+Thus,
+
+\[
+   P(A | B) = \frac{P(A) \cdot P(B|A)}{P(B)}
+\]
+
+Above equation is known as the Bayes Theorem.
+
+\section{Conditional Expectation}
+
+\begin{itemize}
+   \item The value $E[X | Y=y]$ is the expected value of $X$, given the value of $Y$ is known to be $y$.
+   \item Thus, $E[X|Y]$ is a random variable itself, which is the expected value of $X$, choosing a random value for $Y$.
+\end{itemize}
+
+\subsection{Properties of Conditional Expectation}
+\begin{itemize}
+   \item{\bf Tower Property}
+   \[
+      E[E[X | Y]] = E[X]
+   \]
+
+   \begin{proof}
+      \begin{align*}
+         E[X | Y = y] &= \sum_x x \cdot P(X = x \, | \, Y = y) \\
+         E[E[X | Y]] &= \sum_y E[X | Y = y] \cdot P(Y = y) \\
+         &= \sum_y \left (\sum_x x \cdot P(X = x \, | \, Y = y)\right ) \cdot P(Y = y) \\
+         \text{Now,} \\
+         P(X = x | Y = y) &= \frac {P(X = x, Y = y)} {P(Y = y)} \\
+         P(X = x, Y = y) &= P(X = x | Y = y) \cdot P(Y = y) \\
+         \text{So,} \\
+         E[E[X | Y]] &= \sum_y \left (\sum_x x \cdot P(X = x \, | \, Y = y)\right ) \cdot P(Y = y) \\
+         &= \sum_y \left (\sum_x x \cdot P(X = x, Y = y) \right ) \\
+         &= \sum_x \left (x \sum_y P(X = x, Y = y) \right ) \\
+         &= \sum_x x \cdot P(X = x) \\
+         &= E[X] \\
+         E[E[X | Y]] &= E[X]
+      \end{align*}
+   \end{proof}
+
+   \item {\bf Pull Out Property}
+   \[
+      E[h(Y) \cdot X | Y] = h(Y) \cdot E[X | Y]
+   \]
+
+   \begin{proof}
+      \begin{align*}
+         E[h(Y) \cdot X | Y = y] &= \sum_x h(y) \cdot x \cdot P(X = x \, | \, Y = y) \\
+         &= h(y) \cdot \sum_x x \cdot P(X = x \, | \, Y = y) \\
+         E[h(Y) \cdot X | Y = y] &= h(y) \cdot E[X | Y = y]
+      \end{align*}
+   \end{proof}
+
+   \item {\bf Independence}
+   If $X$ and $Y$ are independent,
+   \[
+      E[X | Y] = E[X]
+   \]
+
+   \begin{proof}
+      \begin{align*}
+         E[X | Y = y] &= \sum_x x \cdot P(X = x \, | \, Y = y) \\
+         &= \sum_x x \cdot P(X = x) \\
+         E[X | Y = y] &= E[X]
+      \end{align*}
+   \end{proof}
+\end{itemize}
+
+\end{document}
+
+
+
+
+
